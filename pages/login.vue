@@ -74,9 +74,9 @@
 		},
 		methods: {
 			submit() {
-				uni.showLoading({
-					title: '登录中'
-				})
+				// uni.showLoading({
+				// 	title: '登录中'
+				// })
 				uni.request({
 					url: 'http://42.193.149.90:6006/library/login', //仅为示例，并非真实接口地址。
 					data: {
