@@ -1,0 +1,14 @@
+node_modules
+npm-debug.log
+.pnpm-debug.log
+package-lock.json
+secret
+logs
+*.local
+dump.rdb
+.DS_Store
+.vscode
+dist
+.env
+files
+doc
