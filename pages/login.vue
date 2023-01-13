@@ -8,7 +8,7 @@
 		<view class="form">
 			<uni-forms ref="form" :modelValue="formData" :rules="rules">
 				<uni-forms-item name="username">
-					<input class="input" type="text" value="" v-model="formData.username" placeholder="请输入手机号" />
+					<input class="input" type="text" value="" v-model="formData.username" placeholder="请输入账号" />
 				</uni-forms-item>
 				<uni-forms-item name="password">
 					<input class="input" type="password" value="" v-model="formData.password" placeholder="请输入密码" />
@@ -19,22 +19,9 @@
 				<text class="btnValue">登录</text>
 			</view>
 		</view>
-
-		<!-- <view class="form">
-			<view class="inputWrapper">
-				<input class="input" type="text" value="" v-model="iphone"  placeholder="请输入手机号"/>
-			</view>
-			<view class="inputWrapper">
-				<input class="input" type="password" value="" v-model="password" placeholder="请输入密码"/>
-			</view>
-			<view class="loginBtn">
-				<text class="btnValue" @click="login">登录</text>
-			</view> -->
-
-		<!-- <button  @click="submit">登录</button> -->
-		<!-- <view class="forgotBtn">
-			<navigator url="../register/register"><text>- 注册 -</text></navigator>
-		</view> -->
+		<view class="forgotBtn">
+			<text>- 注册 -</text>
+		</view>
 
 	</view>
 	</view>
@@ -43,7 +30,9 @@
 
 
 <script>
-	import { setToken } from '../utils/token.js'
+	import {
+		setToken
+	} from '../utils/token.js'
 	export default {
 		data() {
 			return {
@@ -74,27 +63,60 @@
 		},
 		methods: {
 			submit() {
-				// uni.showLoading({
-				// 	title: '登录中'
-				// })
+				if (!this.formData.username && !this.formData.password) {
+					return uni.showModal({
+						title: '提示',
+						content: '账号和密码不能为空密码！',
+						success: function(res) {
+							if (res.confirm) {
+								console.log('用户点击确定');
+							} else if (res.cancel) {
+								console.log('用户点击取消');
+							}
+						}
+					})
+				}
+				uni.showLoading({
+					title: '登录中'
+				})
+
 				uni.request({
 					url: 'http://42.193.149.90:6006/library/login', //仅为示例，并非真实接口地址。
 					data: {
-						'email': "admin",
-						'password': "1234567890",
-						'studentCode': "admin",
-						'username': "admin"
+						'email': this.formData.username,
+						'password': this.formData.password,
+						'studentCode': this.formData.username,
+						'username': this.formData.username,
 					},
+					method: "post",
 					header: {
 						'Content-Type': 'application/json'
 					},
 					success: (res) => {
-						setToken(res.data)
-						uni.navigateTo({
-							url: `/pages/index`,
-						})
+						if (res.statusCode === 200) {
+							setToken(res.data)
+							uni.navigateTo({
+								url: `/pages/index`,
+							})
+						} else {
+							uni.showLoading({
+								title: '登录失败！',
+								message: res.data
+							})
+							setTimeout(() => {
+								uni.hideLoading()
+							}, 1000)
+						}
+					},
+					fail: (err) => {
+						setTimeout(() => {
+							uni.hideLoading()
+						}, 1000)
 					}
 				});
+				setTimeout(() => {
+					uni.hideLoading()
+				}, 1000)
 			},
 
 			req(action, params) {

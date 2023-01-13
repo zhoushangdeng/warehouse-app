@@ -25,29 +25,23 @@
 	</view>
 </template>
 <script>
-	// import {
-	// 	navigateTo
-	// } from '@/route/index'
+	import {
+		getToken
+	} from '../utils/token.js'
 	export default {
 		data() {
 			return {
 				titleNViewBackground: '',
 				swiperCurrent: 0,
 				swiperLength: 0,
-				carouselList: [],
-				currentTabIndex: 1,
-				current: 0,
-				currentPage: 'index',
-				serviceList: []
-			};
-		},
-
-		onLoad() {
-			this.carouselList = [{
+				carouselList: [{
 					src: "../static/haircut.png",
 					background: "rgb(203, 87, 60)",
 				}],
-				this.serviceList = [{
+				currentTabIndex: 1,
+				current: 0,
+				currentPage: 'index',
+				serviceList: [{
 						imgUrl: '../static/images/shouji1.png',
 						text: '我的订单',
 						url: '/pages/index'
@@ -62,8 +56,16 @@
 						text: '地址管理',
 						url: '/pages/index'
 					},
-
 				]
+			};
+		},
+
+		onLoad() {
+			if (!getToken()) {
+				uni.navigateTo({
+					url: `/pages/login`,
+				})
+			}
 		},
 		methods: {
 			swiperChange(e) {
