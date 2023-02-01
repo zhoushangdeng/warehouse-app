@@ -6,9 +6,9 @@ secret
 logs
 *.local
 dump.rdb
-.DS_Store
 .vscode
 dist
 .env
 files
 doc
+.DS_Store
