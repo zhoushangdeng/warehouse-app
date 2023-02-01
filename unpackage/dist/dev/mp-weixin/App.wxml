@@ -1,1 +1,0 @@
-<view class="_div">hello world!!!<button data-event-opts="{{[['tap',[['getList']]]]}}" bindtap="__e"></button><view class="_div">{{msg}}</view></view>
